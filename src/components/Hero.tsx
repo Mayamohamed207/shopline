@@ -3,7 +3,7 @@ interface Props {
 }
 
 const Hero = ({ dark }: Props) => (
-  <section className="max-w-7xl mx-auto px-4 pt-16 pb-10 text-center">
+  <section className="max-w-7xl mx-auto px-4 pt-8 md:pt-16 pb-10 text-center">
     <p className="text-xs font-semibold tracking-widest text-cyan-400 uppercase mb-3">Our collection</p>
     <h2 className={`text-4xl md:text-6xl font-bold leading-tight mb-4 ${dark ? "text-white" : "text-slate-900"}`}>
       Find what you <span className="text-cyan-400">need</span>
