@@ -1,4 +1,4 @@
-# Store Explorer
+# Shopline
 
 A single-page React app that fetches, searches, and filters products from the [Fake Store API](https://fakestoreapi.com/products).
 

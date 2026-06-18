@@ -12,3 +12,11 @@ body {
 ::-webkit-scrollbar-thumb { background: #06b6d4; border-radius: 10px; }
 
 .light ::-webkit-scrollbar-track { background: #f1f5f9; }
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;  
+  scrollbar-width: none;  
+}
