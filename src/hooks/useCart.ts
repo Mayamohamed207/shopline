@@ -18,7 +18,19 @@ export const useCart = () => {
     setCartItems((prev) => prev.filter((i) => i.id !== id));
   }, []);
 
+  const increaseQty = useCallback((id: number) => {
+    setCartItems((prev) => prev.map((i) => i.id === id ? { ...i, quantity: i.quantity + 1 } : i));
+  }, []);
+
+  const decreaseQty = useCallback((id: number) => {
+    setCartItems((prev) =>
+      prev
+        .map((i) => i.id === id ? { ...i, quantity: i.quantity - 1 } : i)
+        .filter((i) => i.quantity > 0)
+    );
+  }, []);
+
   const cartCount = cartItems.reduce((sum, i) => sum + i.quantity, 0);
 
-  return { cartOpen, setCartOpen, cartItems, addToCart, removeFromCart, cartCount };
+  return { cartOpen, setCartOpen, cartItems, addToCart, removeFromCart, increaseQty, decreaseQty, cartCount };
 };

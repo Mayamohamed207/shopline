@@ -1,4 +1,4 @@
-import { X, ShoppingBag } from "lucide-react";
+import { X, ShoppingBag, Plus, Minus } from "lucide-react";
 import type { Product } from "../types";
 import Button from "./shared/Button";
 
@@ -11,11 +11,13 @@ interface Props {
   onClose: () => void;
   items: CartItem[];
   onRemove: (id: number) => void;
+  onIncrease: (id: number) => void;
+  onDecrease: (id: number) => void;
   onCheckout: () => void;
   dark: boolean;
 }
 
-const CartSidebar = ({ open, onClose, items, onRemove, onCheckout, dark }: Props) => {
+const CartSidebar = ({ open, onClose, items, onRemove, onIncrease, onDecrease, onCheckout, dark }: Props) => {
   const total = items.reduce((sum, i) => sum + i.price * i.quantity, 0);
 
   return (
@@ -48,7 +50,15 @@ const CartSidebar = ({ open, onClose, items, onRemove, onCheckout, dark }: Props
               <div className="flex-1 min-w-0">
                 <p className={`text-xs font-semibold line-clamp-2 ${dark ? "text-slate-200" : "text-slate-700"}`}>{item.title}</p>
                 <p className="text-cyan-400 font-bold text-sm mt-1">${(item.price * item.quantity).toFixed(2)}</p>
-                <p className={`text-xs ${dark ? "text-slate-500" : "text-slate-400"}`}>Qty: {item.quantity}</p>
+                <div className="flex items-center gap-2 mt-1">
+                  <button onClick={() => onDecrease(item.id)} className={`p-1 rounded-full border ${dark ? "border-slate-700 text-slate-400 hover:text-white" : "border-slate-200 text-slate-500 hover:text-slate-800"}`}>
+                    <Minus className="w-3 h-3" />
+                  </button>
+                  <span className={`text-xs ${dark ? "text-slate-400" : "text-slate-500"}`}>{item.quantity}</span>
+                  <button onClick={() => onIncrease(item.id)} className={`p-1 rounded-full border ${dark ? "border-slate-700 text-slate-400 hover:text-white" : "border-slate-200 text-slate-500 hover:text-slate-800"}`}>
+                    <Plus className="w-3 h-3" />
+                  </button>
+                </div>
               </div>
               <Button variant="danger" onClick={() => onRemove(item.id)}>
                 <X className="w-4 h-4" />
