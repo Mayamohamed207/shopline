@@ -16,7 +16,7 @@ const Header = ({
   search, setSearch, gridView, setGridView, dark, setDark, setCartOpen, cartCount
 }: HeaderProps) => (
   <header className={`sticky top-0 z-50 backdrop-blur border-b transition-colors ${dark ? "bg-[#0a0f1e]/90 border-slate-800" : "bg-white/90 border-slate-200"}`}>
-    <div className="max-w-7xl mx-auto px-4 py-4 flex flex-col md:flex-row md:items-center justify-between gap-y-3 gap-x-6">
+    <div className="max-w-7xl mx-auto px-4 py-2.5 md:py-4 flex flex-col md:flex-row md:items-center justify-between gap-y-2 gap-x-6">
       
       <div className="flex items-center justify-between w-full md:w-auto shrink-0">
         <h1 className="text-xl font-bold tracking-tight">
