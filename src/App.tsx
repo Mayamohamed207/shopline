@@ -19,7 +19,7 @@ type SortOption = "default" | "price-asc" | "price-desc" | "rating";
 
 function AppContent() {
   const { products, loading, error } = useProducts();
-  const { cartOpen, setCartOpen, cartItems, addToCart, removeFromCart, cartCount } = useCart();
+  const { cartOpen, setCartOpen, cartItems, addToCart, removeFromCart, increaseQty, decreaseQty, cartCount } = useCart();
   const { showToast } = useToast();
 
   const [search, setSearch] = useState("");
@@ -96,7 +96,7 @@ function AppContent() {
         {error && <ErrorMessage message={error} />}
         {!loading && !error && filtered.length === 0 && <EmptyState dark={dark} />}
         {!loading && !error && filtered.length > 0 && (
-          <div className={gridView ? "grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4" : "flex flex-col gap-3"}>
+          <div className={gridView ? "grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4" : "flex flex-col gap-3"}>
             {filtered.map((p) => (
               <ProductCard key={p.id} product={p} dark={dark} onView={setSelectedProduct} onAddToCart={handleAddToCart} listView={!gridView} />
             ))}
@@ -105,7 +105,7 @@ function AppContent() {
       </main>
       <Footer dark={dark} />
       <ProductModal product={selectedProduct} onClose={() => setSelectedProduct(null)} onAddToCart={handleAddToCart} dark={dark} />
-      <CartSidebar open={cartOpen} onClose={() => setCartOpen(false)} items={cartItems} onRemove={handleRemoveFromCart} onCheckout={handleCheckout} dark={dark} />
+      <CartSidebar open={cartOpen} onClose={() => setCartOpen(false)} items={cartItems} onRemove={handleRemoveFromCart} onIncrease={increaseQty} onDecrease={decreaseQty} onCheckout={handleCheckout} dark={dark} />
     </div>
   );
 }
