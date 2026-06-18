@@ -15,9 +15,9 @@ const Toast = ({ message, type }: Props) => {
   };
 
   return (
-    <div className="fixed top-10 left-1/2 -translate-x-1/2 z-[60] flex items-center gap-3 bg-slate-800 text-white px-6 py-4 rounded-2xl shadow-2xl border border-slate-700 md:px-10 md:py-5 md:text-lg transition-opacity">
+    <div className="fixed top-10 left-1/2 -translate-x-1/2 z-[60] flex items-center gap-3 bg-slate-800 text-white px-5 py-3.5 rounded-2xl shadow-2xl border border-slate-700 md:px-10 md:py-5 w-[90vw] max-w-sm md:max-w-2xl md:w-auto transition-opacity">
       {icons[type]}
-      <span className="font-medium whitespace-nowrap">{message}</span>
+      <span className="text-sm md:text-lg font-medium leading-snug">{message}</span>
     </div>
   );
 };
