@@ -13,6 +13,7 @@ import ProductModal from "./components/ProductModal";
 import CartSidebar from "./components/CartSidebar";
 import Footer from "./components/Footer";
 import type { Product } from "./types";
+import { SlidersHorizontal } from "lucide-react";
 
 type SortOption = "default" | "price-asc" | "price-desc" | "rating";
 
@@ -48,29 +49,46 @@ function AppContent() {
 
   const handleAddToCart = useCallback((product: Product) => {
     addToCart(product);
-    showToast("Added successfully", "success");
+    showToast("Added successfully");
   }, [addToCart, showToast]);
 
   const handleRemoveFromCart = useCallback((id: number) => {
     removeFromCart(id);
-    showToast("Item removed", "info");
+    showToast("Item removed");
   }, [removeFromCart, showToast]);
 
   const handleCheckout = useCallback(() => {
     setCartOpen(false);
-    showToast("Checkout unavailable. Please try again later.", "error");
+    showToast("Checkout unavailable. Please try again later.");
   }, [setCartOpen, showToast]);
 
   return (
     <div className={`min-h-screen transition-colors duration-300 ${dark ? "bg-[#0a0f1e] text-white" : "bg-slate-50 text-slate-900"}`}>
-      <Header search={search} setSearch={setSearch} sort={sort} setSort={setSort} gridView={gridView} setGridView={setGridView} dark={dark} setDark={setDark} setCartOpen={setCartOpen} cartCount={cartCount} />
+      <Header search={search} setSearch={setSearch} gridView={gridView} setGridView={setGridView} dark={dark} setDark={setDark} setCartOpen={setCartOpen} cartCount={cartCount} />
       <Hero dark={dark} />
       {!loading && !error && (
         <div className="max-w-7xl mx-auto px-4 pb-6">
           <CategoryFilter categories={categories} active={activeCategory} onSelect={setActiveCategory} dark={dark} />
-          <p className={`text-sm mt-4 ${dark ? "text-slate-500" : "text-slate-400"}`}>
-            Showing <span className="text-cyan-400 font-semibold">{filtered.length}</span> products
-          </p>
+          <div className="flex items-center justify-between mt-4 gap-4 flex-wrap">
+            <p className={`text-sm ${dark ? "text-slate-500" : "text-slate-400"}`}>
+              Showing <span className="text-cyan-400 font-semibold">{filtered.length}</span> products
+            </p>
+            <div className="flex items-center gap-2">
+              <SlidersHorizontal className={`w-4 h-4 ${dark ? "text-slate-400" : "text-slate-500"}`} />
+              <select
+                value={sort}
+                onChange={(e) => setSort(e.target.value as SortOption)}
+                className={`text-xs font-medium rounded-full px-3 py-1.5 border outline-none cursor-pointer transition ${
+                  dark ? "bg-slate-800 border-slate-700 text-slate-200" : "bg-white border-slate-200 text-slate-700"
+                }`}
+              >
+                <option value="default">Default</option>
+                <option value="price-asc">Price: Low to High</option>
+                <option value="price-desc">Price: High to Low</option>
+                <option value="rating">Top Rated</option>
+              </select>
+            </div>
+          </div>
         </div>
       )}
       <main className="max-w-7xl mx-auto px-4 pb-20">
