@@ -11,10 +11,11 @@ interface Props {
   onClose: () => void;
   items: CartItem[];
   onRemove: (id: number) => void;
+  onCheckout: () => void;
   dark: boolean;
 }
 
-const CartSidebar = ({ open, onClose, items, onRemove, dark }: Props) => {
+const CartSidebar = ({ open, onClose, items, onRemove, onCheckout, dark }: Props) => {
   const total = items.reduce((sum, i) => sum + i.price * i.quantity, 0);
 
   return (
@@ -62,7 +63,7 @@ const CartSidebar = ({ open, onClose, items, onRemove, dark }: Props) => {
               <span className={`font-semibold ${dark ? "text-slate-300" : "text-slate-600"}`}>Total</span>
               <span className={`font-bold text-lg ${dark ? "text-white" : "text-slate-900"}`}>${total.toFixed(2)}</span>
             </div>
-            <Button className="w-full justify-center py-3 text-sm">Checkout</Button>
+            <Button onClick={onCheckout} className="w-full justify-center py-3 text-sm">Checkout</Button>
           </div>
         )}
       </div>

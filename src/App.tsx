@@ -1,6 +1,7 @@
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState, useEffect, useCallback } from "react";
 import { useProducts } from "./hooks/useProducts";
 import { useCart } from "./hooks/useCart";
+import { ToastProvider, useToast } from "./context/ToastContext";
 import Header from "./components/Header";
 import Hero from "./components/Hero";
 import CategoryFilter from "./components/CategoryFilter";
@@ -15,9 +16,10 @@ import type { Product } from "./types";
 
 type SortOption = "default" | "price-asc" | "price-desc" | "rating";
 
-function App() {
+function AppContent() {
   const { products, loading, error } = useProducts();
   const { cartOpen, setCartOpen, cartItems, addToCart, removeFromCart, cartCount } = useCart();
+  const { showToast } = useToast();
 
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState("all");
@@ -44,19 +46,25 @@ function App() {
     return result;
   }, [products, search, activeCategory, sort]);
 
+  const handleAddToCart = useCallback((product: Product) => {
+    addToCart(product);
+    showToast("Added successfully", "success");
+  }, [addToCart, showToast]);
+
+  const handleRemoveFromCart = useCallback((id: number) => {
+    removeFromCart(id);
+    showToast("Item removed", "info");
+  }, [removeFromCart, showToast]);
+
+  const handleCheckout = useCallback(() => {
+    setCartOpen(false);
+    showToast("Checkout unavailable. Please try again later.", "error");
+  }, [setCartOpen, showToast]);
+
   return (
     <div className={`min-h-screen transition-colors duration-300 ${dark ? "bg-[#0a0f1e] text-white" : "bg-slate-50 text-slate-900"}`}>
-      
-      <Header 
-        search={search} setSearch={setSearch} 
-        sort={sort} setSort={setSort} 
-        gridView={gridView} setGridView={setGridView} 
-        dark={dark} setDark={setDark} 
-        setCartOpen={setCartOpen} cartCount={cartCount} 
-      />
-
+      <Header search={search} setSearch={setSearch} sort={sort} setSort={setSort} gridView={gridView} setGridView={setGridView} dark={dark} setDark={setDark} setCartOpen={setCartOpen} cartCount={cartCount} />
       <Hero dark={dark} />
-
       {!loading && !error && (
         <div className="max-w-7xl mx-auto px-4 pb-6">
           <CategoryFilter categories={categories} active={activeCategory} onSelect={setActiveCategory} dark={dark} />
@@ -65,7 +73,6 @@ function App() {
           </p>
         </div>
       )}
-
       <main className="max-w-7xl mx-auto px-4 pb-20">
         {loading && <LoadingSpinner dark={dark} />}
         {error && <ErrorMessage message={error} />}
@@ -73,18 +80,22 @@ function App() {
         {!loading && !error && filtered.length > 0 && (
           <div className={gridView ? "grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4" : "flex flex-col gap-3"}>
             {filtered.map((p) => (
-              <ProductCard key={p.id} product={p} dark={dark} onView={setSelectedProduct} onAddToCart={addToCart} listView={!gridView} />
+              <ProductCard key={p.id} product={p} dark={dark} onView={setSelectedProduct} onAddToCart={handleAddToCart} listView={!gridView} />
             ))}
           </div>
         )}
       </main>
-
       <Footer dark={dark} />
-
-      <ProductModal product={selectedProduct} onClose={() => setSelectedProduct(null)} onAddToCart={addToCart} dark={dark} />
-      <CartSidebar open={cartOpen} onClose={() => setCartOpen(false)} items={cartItems} onRemove={removeFromCart} dark={dark} />
+      <ProductModal product={selectedProduct} onClose={() => setSelectedProduct(null)} onAddToCart={handleAddToCart} dark={dark} />
+      <CartSidebar open={cartOpen} onClose={() => setCartOpen(false)} items={cartItems} onRemove={handleRemoveFromCart} onCheckout={handleCheckout} dark={dark} />
     </div>
   );
 }
 
-export default App;
+export default function App() {
+  return (
+    <ToastProvider>
+      <AppContent />
+    </ToastProvider>
+  );
+}
