@@ -22,7 +22,17 @@ The app starts on `http://localhost:5173` (Vite default). For a CRA-style setup,
 
 - `components/shared/` holds `Button`, `Badge`, and `StarRating` — the primitives reused across `ProductCard`, `ProductModal`, `CartSidebar`, `CategoryFilter`, and `ErrorMessage`, so there's one place to change button styling instead of several.
 - `hooks/useProducts.ts` owns the fetch, loading, and error state, keeping `App.tsx` focused on filtering/search logic and layout.
+- `hooks/useCart.ts` owns all cart state and mutations (`addToCart`, `removeFromCart`, `increaseQty`, `decreaseQty`), so `App.tsx` and `CartSidebar` just consume cart logic instead of duplicating it.
 - Search and category filtering both run through a single `useMemo` in `App.tsx`, so the filtered list only recomputes when `products`, `search`, `activeCategory`, or `sort` actually change — not on every render.
+
+## Cart quantity controls
+
+`CartSidebar` includes per-item quantity controls (`+` / `-`) backed by `increaseQty` and `decreaseQty` in `useCart.ts`:
+
+- `increaseQty(id)` bumps that item's quantity by 1.
+- `decreaseQty(id)` decrements it, then filters out any item whose quantity drops to 0 — so hitting `-` on the last unit removes it from the cart instead of leaving a "0" line item.
+
+Both are wrapped in `useCallback`, consistent with the rest of the cart actions, so they don't get redefined on every render.
 
 ## Handling the optimization requirement
 
