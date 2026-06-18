@@ -40,3 +40,9 @@ The brief asks for the filter logic to avoid re-rendering the entire list on eve
 
 1. `ProductCard` is wrapped in `React.memo`, so a card only re-renders if its own props change — not just because its parent re-rendered.
 2. `addToCart` and `removeFromCart` are wrapped in `useCallback` in `App.tsx`. Without this, those functions get redefined on every render, which would break `memo`'s comparison and silently re-render every card anyway — wrapping the callbacks is what makes the `memo` on `ProductCard` actually do something.
+
+## Challenges faced
+
+1- The main one was Making `React.memo` actually prevent re-renders rather than just being cosmetic. I had to trace the props passed into `ProductCard` and wrap the function handlers in `useCallback` so updates in the parent component wouldn't break the memoization.
+
+2- The other was adapting the navigation header for mobile screens. I structured the flex layout so the logo and action icons stay in the top row, while the search bar drops down into its own full-width row below for a cleaner, more usable mobile interface.
